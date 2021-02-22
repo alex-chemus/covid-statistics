@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Статистика COVID-19</title>
+	<meta name="description" content="Статистика COVID-19 по 5 странам мира">
+	<meta name="robots" content="noindex">
+
+	<meta property="og:title" content="Статистика COVID-19">
+	<meta property="og:description" content="Статистика COVID-19 по 5 странам мира">
+
+	<!--use vue.js-->
+	<script src="https://unpkg.com/vue@next"></script>
+	<!--use axios-->
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+	<!--use google fonts-->
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+	<!--use animate.css-->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+	<style>
+		body, html {
+			margin: 0;
+			padding: 0;
+			width: 100%;
+			box-sizing: border-box;
+		}
+
+		html {
+			font-size: 16px;
+		}
+
+		body {
+			padding: 0 30px;
+			display: grid;
+			grid-template-areas: 1fr / 1fr
+		}
+
+		#app {
+			height: 100vh;
+
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-direction: column;
+
+			font-family: 'Nunito';
+		}
+
+		.country {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			position: relative;
+
+			width: 100%;
+			max-width: 768px;
+
+			margin-bottom: 3.5rem;
+		}
+
+		.country:not(:last-child)::after {
+			content: '';
+			display: block;
+			width: 100%;
+			bottom: -1.5rem;
+			position: absolute;
+			height: 1px;
+			background-color: black;
+			opacity: .2;
+		}
+
+		.wrapper {
+			display: flex;
+			justify-content: space-between;
+
+			width: 100%
+		}
+
+		.wrapper > div {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.recovered {
+			color: limegreen;
+		}
+
+		.deaths {
+			color: red;
+		}
+
+		i {
+			font-size: .75rem;
+		}
+
+		h1 {
+			margin-top: 0;
+			line-height: auto;
+		}
+
+		h3 {
+			margin: 0;
+			margin-bottom: .2rem;
+			line-height: auto;
+		}
+
+		h2 {
+			margin-bottom: 1rem;
+			margin-top: 0;
+			line-height: auto;
+		}
+	</style>
+</head>
+<body>
+
+	<main id="app">
+		<h1>Статистика COVID-19 по странам</h1>
+
+		<div class="country">
+			<h2>Россия</h2>
+			<div class="wrapper animate__animated animate__fadeIn animate__fast" v-if="russia">
+				<div>
+					<h3 class="confirmed">{{ russia.confirmed }}</h3>
+					<i>Заражёных</i>
+				</div>
+
+				<div>
+					<h3 class="recovered">{{ russia.recovered }}</h3>
+					<i>Выздоровело</i>
+				</div>
+
+				<div>
+					<h3 class="deaths">{{ russia.dead }}</h3>
+					<i>Умерло</i>
+				</div>
+			</div>
+			<p v-else>Загружается...</p>
+		</div>
+
+
+		<div class="country">
+			<h2>США</h2>
+			<div class="wrapper animate__animated animate__fadeIn animate__fast" v-if="usa">
+				<div>
+					<h3 class="confirmed">{{ usa.confirmed }}</h3>
+					<i>Заражёных</i>
+				</div>
+
+				<div>
+					<h3 class="recovered">{{ usa.recovered }}</h3>
+					<i>Выздоровело</i>
+				</div>
+
+				<div>
+					<h3 class="deaths">{{ usa.dead }}</h3>
+					<i>Умерло</i>
+				</div>
+			</div>
+			<p v-else>Загружается...</p>
+		</div>
+
+
+		<div class="country">
+			<h2>Китай</h2>
+			<div class="wrapper animate__animated animate__fadeIn animate__fast" v-if="china">
+				<div>
+					<h3 class="confirmed">{{ china.confirmed }}</h3>
+					<i>Заражёных</i>
+				</div>
+
+				<div>
+					<h3 class="recovered">{{ china.recovered }}</h3>
+					<i>Выздоровело</i>
+				</div>
+
+				<div>
+					<h3 class="deaths">{{ china.dead }}</h3>
+					<i>Умерло</i>
+				</div>
+			</div>
+			<p v-else>Загружается...</p>
+		</div>
+
+
+		<div class="country">
+			<h2>Франция</h2>
+			<div class="wrapper animate__animated animate__fadeIn animate__fast" v-if="france">
+				<div>
+					<h3 class="confirmed">{{ france.confirmed }}</h3>
+					<i>Заражёных</i>
+				</div>
+
+				<div>
+					<h3 class="recovered">{{ france.recovered }}</h3>
+					<i>Выздоровело</i>
+				</div>
+
+				<div>
+					<h3 class="deaths">{{ france.dead }}</h3>
+					<i>Умерло</i>
+				</div>
+			</div>
+			<p v-else>Загружается...</p>
+		</div>
+
+
+		<div class="country">
+			<h2>Великобритания</h2>
+			<div class="wrapper animate__animated animate__fadeIn animate__fast" v-if="uk">
+				<div>
+					<h3 class="confirmed">{{ uk.confirmed }}</h3>
+					<i>Заражёных</i>
+				</div>
+
+				<div>
+					<h3 class="recovered">{{ uk.recovered }}</h3>
+					<i>Выздоровело</i>
+				</div>
+
+				<div>
+					<h3 class="deaths">{{ uk.dead }}</h3>
+					<i>Умерло</i>
+				</div>
+			</div>
+			<!--<p v-else-if="message">{{ message }}</p>-->
+			<p v-else>Загружается...</p>
+		</div>
+	</main>
+
+
+	<script>
+		Vue.createApp({
+			data() {
+				return {
+					russia: null,
+					usa: null,
+					china: null,
+					france: null,
+					uk: null,
+					message: null,
+				}
+			},
+
+			created() {
+				//this code doesn't work anymore due to the api
+				/*axios('https://api.covid19api.com/summary')
+				.then(response => {
+					if (response.status != 200) {
+						return Promise.reject()
+					}
+
+					this.russia = response.data.Countries.find(item => {
+						return item.Slug == 'russia'
+					})
+
+					this.usa = response.data.Countries.find(item => {
+						return item.Slug == 'united-states'
+					})
+
+					this.china = response.data.Countries.find(item => {
+						return item.Slug == 'china'
+					})
+
+					this.france = response.data.Countries.find(item => {
+						return item.Slug == 'france'
+					})
+
+					this.uk = response.data.Countries.find(item => {
+						return item.Slug == 'united-kingdom'
+					})
+				})
+				.catch(() => {
+					alert('Не удалось загрузить данные  сервера. Попробуйте перезагрузить страницу или зайдите позже')
+				})*/
+
+				axios('https://www.trackcorona.live/api/countries')
+				.then(response => {
+					console.log(response)
+					if (response.status != 200) {
+						alert('alerted')
+						return Promise.reject()
+					} 
+
+					console.log(response)
+
+					this.russia = response.data.data.find(item => item.country_code == 'ru')
+					this.usa = response.data.data.find(item => item.country_code == 'us')
+					this.china = response.data.data.find(item => item.country_code == 'cn')
+					this.france = response.data.data.find(item => item.country_code == 'fr')
+					this.uk = response.data.data.find(item => item.country_code == 'gb')
+				}).catch(() => {
+					alert('Не удалось загрузить данные с сервера. Попробуйте перезагрузить страницу или зайдите позже')
+				})
+			},
+		}).mount('#app')
+	</script>
+</body>
+</html>
