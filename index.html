@@ -285,12 +285,10 @@
 				.then(response => {
 					console.log(response)
 					if (response.status != 200) {
-						alert('alerted')
+						alert('Не удалось загрузить данные из-за неполадок сервера. Попробуйте загрузить позже')
 						return Promise.reject()
 					} 
-
-					console.log(response)
-
+	
 					this.russia = response.data.data.find(item => item.country_code == 'ru')
 					this.usa = response.data.data.find(item => item.country_code == 'us')
 					this.china = response.data.data.find(item => item.country_code == 'cn')
